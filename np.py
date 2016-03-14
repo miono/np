@@ -18,5 +18,9 @@ dom = ET.fromstring(result)
 
 artist = dom.find("recenttracks/track/artist").text
 song = dom.find("recenttracks/track/name").text
+listening_now = dom.find("recenttracks/track").get('nowplaying')
 
-print "%s - %s" % (artist, song)
+if listening_now == 'true':
+    print "%s is listening to: %s - %s" % (user, artist, song)
+else:
+    print "%s last listened to: %s - %s" % (user, artist, song)
