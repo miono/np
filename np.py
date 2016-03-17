@@ -2,7 +2,7 @@
 
 import sys
 import urllib2
-import xml.etree.ElementTree as ET
+import json
 
 from config import api_key, default_user, api_url
 
@@ -11,16 +11,14 @@ try:
 except IndexError:
     user = default_user
 
-# print user
+result = urllib2.urlopen("%s/2.0/?method=user.getrecenttracks&limit=1&format=json&user=%s&api_key=%s" % (api_url, user, api_key))
+data = json.load(result)
 
-result = urllib2.urlopen("%s/2.0/?method=user.getrecenttracks&limit=1&user=%s&api_key=%s" % (api_url, user, api_key)).read()
-dom = ET.fromstring(result)
+artist = data['recenttracks']['track'][0]['artist']['#text']
+song = data['recenttracks']['track'][0]['name']
 
-artist = dom.find("recenttracks/track/artist").text
-song = dom.find("recenttracks/track/name").text
-listening_now = dom.find("recenttracks/track").get('nowplaying')
 
-if listening_now == 'true':
+if data['recenttracks']['track'][0]['@attr']['nowplaying']:
     print "%s is listening to: %s - %s" % (user, artist, song)
 else:
     print "%s last listened to: %s - %s" % (user, artist, song)
