@@ -18,6 +18,7 @@ artist = data['recenttracks']['track'][0]['artist']['#text']
 song = data['recenttracks']['track'][0]['name']
 
 
+# There's a bug here when someone isn't currently listening
 if data['recenttracks']['track'][0]['@attr']['nowplaying']:
     print "%s is listening to: %s - %s" % (user, artist, song)
 else:
